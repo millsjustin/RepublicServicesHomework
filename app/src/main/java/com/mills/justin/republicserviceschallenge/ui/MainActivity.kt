@@ -1,8 +1,8 @@
-package com.mills.justin.republicserviceschallenge
+package com.mills.justin.republicserviceschallenge.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import com.mills.justin.republicserviceschallenge.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -12,9 +12,3 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 }
-
-@AndroidEntryPoint
-class DriverListFragment : Fragment()
-
-@AndroidEntryPoint
-class RouteListFragment : Fragment()

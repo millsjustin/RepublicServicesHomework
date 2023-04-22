@@ -1,4 +1,29 @@
-Republic Services Take Home Challenge:
+# Republic Services Take Home Challenge:
+
+## My Solution
+
+### How to build
+
+1. Clone the repo
+1. To build and install to device run `./gradlew installDebug`
+
+### Architecture overview
+
+- Hilt (dependency injection)
+- Room (local database)
+- OkHttp (network requests)
+- Moshi (JSON deserialization)
+- ConstraintLayout,RecyclerView,Material (UI)
+
+The app uses MVVM architecture. There is a single activity with multiple fragments. ViewModels access the data layer through the DriverRepo, which manages remote and local data sources.
+
+### Things I would improve
+
+1. Add unit tests for data layer business logic.
+1. Handle IO exceptions for network and disk. I've mostly ignored possible exceptions and focussed only on the happy path.
+1. Maybe use Jetpack Compose instead of XML layouts.
+
+## Challenge Details
 
 Your task is to build an Android application taking advantage of the clean architecture principles and best practices. You can use any of the Jetpack libraries but use other third-party libraries only if necessary. 
 

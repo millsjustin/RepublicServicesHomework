@@ -1,27 +1,43 @@
 package com.mills.justin.republicserviceschallenge.data.remote
 
-import android.content.Context
-import com.mills.justin.republicserviceschallenge.R
 import com.squareup.moshi.Moshi
-import dagger.hilt.android.qualifiers.ApplicationContext
-import okio.buffer
-import okio.source
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import javax.inject.Inject
 
+const val DATA_URL = "https://d49c3a78-a4f2-437d-bf72-569334dea17c.mock.pstmn.io/data"
+
 class DriverRemoteDataSourceImpl @Inject constructor(
-    @ApplicationContext private val appContext: Context,
     private val moshi: Moshi,
+    private val okHttpClient: OkHttpClient,
 ) : DriverRemoteDataSource {
 
-    override fun fetchData(): RemoteData {
+    override suspend fun fetchData(): ApiResult<RemoteData> {
+        return withContext(Dispatchers.IO) {
+            val request = Request.Builder()
+                .url(DATA_URL)
+                .build()
+            val response = okHttpClient.newCall(request)
+                .execute()
 
-        val data = appContext.resources.openRawResource(R.raw.data).use { inputStream ->
-            inputStream.source().buffer().use { source ->
-                moshi.adapter(RemoteData::class.java)
-                    .fromJson(source)
+            if (!response.isSuccessful) {
+                return@withContext ApiResult.Failure(
+                    RuntimeException(response.toString())
+                )
             }
-        }
 
-        return data!! // TODO handle null here
+            val data = response.body?.use { body ->
+                body.source().use { source ->
+                    moshi.adapter(RemoteData::class.java)
+                        .fromJson(source)
+                }
+            } ?: return@withContext ApiResult.Failure(
+                RuntimeException("failed to parse json from response: $response")
+            )
+
+            return@withContext ApiResult.Success(data)
+        }
     }
 }

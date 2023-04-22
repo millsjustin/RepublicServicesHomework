@@ -1,9 +1,11 @@
 package com.mills.justin.republicserviceschallenge.data
 
+import android.util.Log
 import com.mills.justin.republicserviceschallenge.data.local.DriverLocalDataSource
 import com.mills.justin.republicserviceschallenge.data.local.LocalData
 import com.mills.justin.republicserviceschallenge.data.local.LocalDriver
 import com.mills.justin.republicserviceschallenge.data.local.LocalRoute
+import com.mills.justin.republicserviceschallenge.data.remote.ApiResult
 import com.mills.justin.republicserviceschallenge.data.remote.DriverRemoteDataSource
 import com.mills.justin.republicserviceschallenge.data.remote.RemoteData
 import kotlinx.coroutines.CoroutineScope
@@ -22,8 +24,21 @@ class DriverRepoImpl @Inject constructor(
 
     override fun refreshData() {
         externalScope.launch {
-            val remoteData = remoteDataSource.fetchData()
-            localDataSource.insert(remoteData.toLocalData())
+            when (val result = remoteDataSource.fetchData()) {
+                is ApiResult.Failure -> {
+                    // Just logging the error in a production app we would want to propagate the
+                    //  error to a user visible message
+                    Log.w(
+                        DriverRepoImpl::class.java.simpleName,
+                        "failed to fetch data from api",
+                        result.error
+                    )
+                }
+
+                is ApiResult.Success -> {
+                    localDataSource.insert(result.value.toLocalData())
+                }
+            }
         }
     }
 

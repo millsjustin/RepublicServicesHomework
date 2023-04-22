@@ -73,7 +73,6 @@ class DriverListFragment : Fragment(), MenuProvider {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.menu, menu)
-        // TODO handle tinting the icon in light/night themes
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

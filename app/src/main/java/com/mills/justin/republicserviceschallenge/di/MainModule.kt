@@ -19,6 +19,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import okhttp3.OkHttpClient
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -64,5 +65,11 @@ object MainModule {
             klass = DriverDatabase::class.java,
             name = "driver.db",
         ).build()
+    }
+
+    @Provides
+    fun providesOkHttp(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .build()
     }
 }

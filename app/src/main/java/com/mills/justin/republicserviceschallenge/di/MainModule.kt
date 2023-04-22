@@ -6,6 +6,7 @@ import com.mills.justin.republicserviceschallenge.data.local.DriverLocalDataSour
 import com.mills.justin.republicserviceschallenge.data.local.DriverLocalDataSourceImpl
 import com.mills.justin.republicserviceschallenge.data.remote.DriverRemoteDataSource
 import com.mills.justin.republicserviceschallenge.data.remote.DriverRemoteDataSourceImpl
+import com.squareup.moshi.Moshi
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -38,10 +39,15 @@ abstract class DataModule {
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object CoroutineModule {
+object MainModule {
 
     @Provides
     fun provideExternalCoroutineScope(): CoroutineScope {
         return CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    }
+
+    @Provides
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder().build()
     }
 }

@@ -58,7 +58,7 @@ class DriverListFragment : Fragment(), MenuProvider {
     }
 
     private fun initObservers() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     driverListAdapter.submitList(it.drivers)

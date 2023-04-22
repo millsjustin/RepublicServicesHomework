@@ -2,6 +2,7 @@ package com.mills.justin.republicserviceschallenge.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
@@ -9,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DriverDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllDrivers(vararg drivers: EntityDriver)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllRoutes(vararg routes: EntityRoute)
 
     @Query("DELETE FROM driver WHERE id NOT IN (:ids)")

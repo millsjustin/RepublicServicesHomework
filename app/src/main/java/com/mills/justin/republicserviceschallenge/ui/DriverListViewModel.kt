@@ -41,7 +41,7 @@ class DriverListViewModel @Inject constructor(
         driverRepo.drivers(),
     ) { isSorted, drivers ->
         UiState(
-            isLoading = false,
+            isLoading = drivers.isEmpty(),
             isSorted = isSorted,
             drivers = if (isSorted) sortedDrivers(drivers) else drivers,
         )

@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -62,6 +63,7 @@ class DriverListFragment : Fragment(), MenuProvider {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     driverListAdapter.submitList(it.drivers)
+                    binding.loading.isVisible = it.isLoading
                 }
             }
         }
@@ -81,6 +83,7 @@ class DriverListFragment : Fragment(), MenuProvider {
                 viewModel.onClickSort()
                 true
             }
+
             else -> false
         }
     }

@@ -1,27 +1,35 @@
 package com.mills.justin.republicserviceschallenge.data.local
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DriverLocalDataSourceImpl @Inject constructor(
+    private val driverDatabase: DriverDatabase,
+) : DriverLocalDataSource {
 
-): DriverLocalDataSource {
-
-    private val _data: MutableStateFlow<LocalData> = MutableStateFlow(
-        LocalData(emptyList(), emptyList())
-    )
-
-    override fun insert(data: LocalData) {
-        _data.value = data
+    override suspend fun insert(data: LocalData) {
+        withContext(Dispatchers.IO) {
+            driverDatabase.driverDao().saveData(data)
+        }
     }
 
     override fun drivers(): Flow<List<LocalDriver>> {
-        return _data.map { it.drivers }
+        return driverDatabase.driverDao().drivers()
+            .map { drivers ->
+                drivers.map { it.toLocal() }
+            }
+            .flowOn(Dispatchers.IO)
     }
 
     override fun routes(): Flow<List<LocalRoute>> {
-        return _data.map { it.routes }
+        return driverDatabase.driverDao().routes()
+            .map { routes ->
+                routes.map { it.toLocal() }
+            }
+            .flowOn(Dispatchers.IO)
     }
 }

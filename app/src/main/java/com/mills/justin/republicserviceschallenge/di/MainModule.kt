@@ -1,7 +1,10 @@
 package com.mills.justin.republicserviceschallenge.di
 
+import android.content.Context
+import androidx.room.Room
 import com.mills.justin.republicserviceschallenge.data.DriverRepo
 import com.mills.justin.republicserviceschallenge.data.DriverRepoImpl
+import com.mills.justin.republicserviceschallenge.data.local.DriverDatabase
 import com.mills.justin.republicserviceschallenge.data.local.DriverLocalDataSource
 import com.mills.justin.republicserviceschallenge.data.local.DriverLocalDataSourceImpl
 import com.mills.justin.republicserviceschallenge.data.remote.DriverRemoteDataSource
@@ -12,6 +15,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -49,5 +53,16 @@ object MainModule {
     @Provides
     fun provideMoshi(): Moshi {
         return Moshi.Builder().build()
+    }
+
+    @Provides
+    fun provideDriverDatabase(
+        @ApplicationContext context: Context,
+    ): DriverDatabase {
+        return Room.databaseBuilder(
+            context = context,
+            klass = DriverDatabase::class.java,
+            name = "driver.db",
+        ).build()
     }
 }

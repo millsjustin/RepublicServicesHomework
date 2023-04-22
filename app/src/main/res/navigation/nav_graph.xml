@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_driver_list">
         <action
             android:id="@+id/toRouteList"
-            app:destination="@id/routeListFragment" />
+            app:destination="@id/routeListFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment

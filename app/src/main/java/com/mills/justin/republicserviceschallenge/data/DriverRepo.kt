@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 interface DriverRepo {
     fun refreshData()
     fun drivers(): Flow<List<Driver>>
-    fun routesForDriver(id: String): Flow<List<Route>>
+    fun routesForDriver(driverId: String): Flow<List<Route>>
 }

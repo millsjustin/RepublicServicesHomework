@@ -4,5 +4,5 @@ data class LocalRoute(
     val id: String,
     val name: String,
     val type: String,
-    val index: String,
+    val index: Int,
 )
